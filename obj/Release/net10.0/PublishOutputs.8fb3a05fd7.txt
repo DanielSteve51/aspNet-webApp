@@ -1,0 +1,7 @@
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\VowelWebApp.exe
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\appsettings.Development.json
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\appsettings.json
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\VowelWebApp.dll
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\VowelWebApp.deps.json
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\VowelWebApp.runtimeconfig.json
+C:\Users\Daniel Steve\DotNetWebApp\VowelWebApp\publish\VowelWebApp.pdb

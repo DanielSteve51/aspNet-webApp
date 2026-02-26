@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Vowel Counter";
+}
+
+<h2>Vowel Counter</h2>
+
+<form method="post">
+    <label>Enter a word:</label>
+    <input type="text" name="word" />
+    <button type="submit">Count</button>
+</form>
+
+@if (ViewBag.Result != null)
+{
+    <p><strong>@ViewBag.Result</strong></p>
+}
