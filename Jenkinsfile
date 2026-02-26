@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters{
-        string(name:'NEXUS_IP' description:'Private IP of Nexus Server')
+        string(name:'NEXUS_IP', description:'Private IP of Nexus Server')
     }
     
     environment {
