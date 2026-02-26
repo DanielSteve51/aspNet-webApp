@@ -43,13 +43,13 @@ pipeline {
         }
 
         stage('Upload to Nexus') {
-            steps {
-                sh '''
-                curl -u USER:PASS \
-                --upload-file ${APP_NAME}-${VERSION}.zip \
-                http://${params.NEXUS_IP}:8081/repository/dotnet-repo/${APP_NAME}-${VERSION}.zip
-                '''
-            }
-        }
+    steps {
+        sh """
+        curl -u USER:PASS \
+        --upload-file ${APP_NAME}-${VERSION}.zip \
+        http://${params.NEXUS_IP}:8081/repository/dotnet-repo/${APP_NAME}-${VERSION}.zip
+        """
+    }
+}
     }
 }
