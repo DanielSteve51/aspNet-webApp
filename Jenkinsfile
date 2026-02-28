@@ -3,6 +3,8 @@ pipeline {
 
     parameters {
         string(name: 'NEXUS_IP', description: 'Private IP of Nexus Server')
+        string(name: 'DEPLOY_IP', description: 'Private IP of DOtNet Deploy Server')
+        string(name: 'REPO_NAME', description: 'Nexus Repository Name (Example: dotnet-repo)')
     }
 
     environment {
@@ -75,6 +77,14 @@ pipeline {
     post {
         success {
             echo "Build and upload successful: ${APP_NAME}-${VERSION}.zip"
+            build job: 'aspNet_webApp_CD_TEST',
+        parameters: [
+            string(name: 'NEXUS_IP', value: params.NEXUS_IP),
+            string(name: 'DEPLOY_IP', value: parms.DEPLOY_IP),
+            string(name: 'APP_NAME', value: APP_NAME),
+            string(name: 'REPO_NAME', value: 'dotnet-repo'),
+            string(name: 'VERSION', value: VERSION)
+        ]
         }
         failure {
             echo "Build failed."
