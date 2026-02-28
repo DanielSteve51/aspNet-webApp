@@ -80,7 +80,7 @@ pipeline {
             build job: 'aspNet_webApp_CD_TEST',
         parameters: [
             string(name: 'NEXUS_IP', value: params.NEXUS_IP),
-            string(name: 'DEPLOY_IP', value: parms.DEPLOY_IP),
+            string(name: 'DEPLOY_IP', value: params.DEPLOY_IP),
             string(name: 'APP_NAME', value: APP_NAME),
             string(name: 'REPO_NAME', value: 'dotnet-repo'),
             string(name: 'VERSION', value: VERSION)
