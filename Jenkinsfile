@@ -44,12 +44,18 @@ pipeline {
 
        stage('Upload to Nexus') {
     steps {
+        withCredentials([usernamePassword(
+    credentialsId: 'nexus-creds',
+    usernameVariable: 'NEXUS_USER',
+    passwordVariable: 'NEXUS_PASS'
+)]){
         sh """
         FILE_NAME=${APP_NAME}-${VERSION}.zip
-        curl -v -u admin:admin \
+        curl -f -v -u $NEXUS_USER:$NEXUS_PASS \
         --upload-file \$FILE_NAME \
         http://${params.NEXUS_IP}:8081/repository/dotnet-repo/\$FILE_NAME
         """
+        }
     }
 }
     }
