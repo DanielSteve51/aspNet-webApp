@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NEXUS_IP', description: 'Private IP of Nexus Server')
+        string(name: 'DEPLOY_IP', description: 'Private IP of ASP.NET Server')
+        string(name: 'APP_NAME', description: 'Application Name (Example: VowelWebApp)')
+        string(name: 'REPO_NAME', description: 'Nexus Repository Name (Example: dotnet-repo)')
+        string(name: 'VERSION', description: 'Version to Deploy (Example: 1.0.25)')
+    }
+
+    stages {
+
+        stage('Deploy ASP.NET App') {
+            steps {
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: 'aspnet-ssh',
+                        keyFileVariable: 'SSH_KEY'
+                    ),
+                    usernamePassword(
+                        credentialsId: 'nexus-creds',
+                        usernameVariable: 'NEXUS_USER',
+                        passwordVariable: 'NEXUS_PASS'
+                    )
+                ]) {
+
+                    sh """
+                    ssh -i $SSH_KEY -o StrictHostKeyChecking=no ubuntu@${params.DEPLOY_IP} '
+
+                        echo "Stopping service..."
+                        sudo systemctl stop dotnet-app@${params.APP_NAME} || true
+
+                        echo "Cleaning old files..."
+                        rm -rf /var/www/${params.APP_NAME}/*
+                        mkdir -p /var/www/${params.APP_NAME}
+
+                        echo "Downloading artifact..."
+                        curl -f -u ${NEXUS_USER}:${NEXUS_PASS} \
+                        -o /tmp/${params.APP_NAME}.zip \
+                        http://${params.NEXUS_IP}:8081/repository/${params.REPO_NAME}/${params.APP_NAME}-${params.VERSION}.zip
+
+                        echo "Unzipping..."
+                        unzip -o /tmp/${params.APP_NAME}.zip -d /var/www/${params.APP_NAME}
+
+                        echo "Starting service..."
+                        sudo systemctl start dotnet-app@${params.APP_NAME}
+
+                        echo "Deployment completed successfully."
+                    '
+                    """
+                }
+            }
+        }
+    }
+}
