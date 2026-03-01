@@ -27,7 +27,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]) {
                         sh '''
                         dotnet sonarscanner begin \
-                        /k:"'$APP_NAME'" \
+                        /k:$APP_NAME \
                         /d:sonar.host.url=$SONAR_HOST_URL \
                         /d:sonar.login=$SONAR_TOKEN
                         '''
