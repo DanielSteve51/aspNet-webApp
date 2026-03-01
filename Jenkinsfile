@@ -92,23 +92,22 @@ pipeline {
         }
 
         stage('Upload to Nexus') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'nexus-creds',
-                    usernameVariable: 'NEXUS_USER',
-                    passwordVariable: 'NEXUS_PASS'
-                )]) {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'nexus-creds',
+            usernameVariable: 'NEXUS_USER',
+            passwordVariable: 'NEXUS_PASS'
+        )]) {
 
-                    sh """
-                    FILE_NAME='$APP_NAME'-'$VERSION'.zip
-
-                    curl -f -u $NEXUS_USER:$NEXUS_PASS \
-                    --upload-file $FILE_NAME \
-                    http://''' + params.NEXUS_IP + ''':8081/repository/''' + params.REPO_NAME + '''/$FILE_NAME
-                    """
-                }
-            }
+            sh """
+            curl -f -u ${NEXUS_USER}:${NEXUS_PASS} \
+            --upload-file ${APP_NAME}-${VERSION}.zip \
+            http://${params.NEXUS_IP}:8081/repository/${params.REPO_NAME}/${APP_NAME}-${VERSION}.zip
+            """
         }
+    }
+}
+
     }
 
     post {
