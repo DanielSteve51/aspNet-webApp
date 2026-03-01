@@ -82,14 +82,13 @@ pipeline {
         }
 
         stage('Package') {
-            steps {
-                sh '''
-                cd publish
-                zip -r ../'$APP_NAME'-'$VERSION'.zip .
-                cd ..
-                '''
-            }
-        }
+    steps {
+        sh """
+        cd publish
+        zip -r ../${APP_NAME}-${VERSION}.zip .
+        """
+    }
+}
 
         stage('Upload to Nexus') {
     steps {
