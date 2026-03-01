@@ -26,9 +26,46 @@ pipeline {
             }
         }
 
+        stage('Sonar Begin') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                        dotnet sonarscanner begin \
+                        /k:"${SONAR_PROJECT_KEY}" \
+                        /d:sonar.host.url=$SONAR_HOST_URL \
+                        /d:sonar.login=$SONAR_TOKEN
+                        """
+                    }
+                }
+            }
+        }
+
+
         stage('Build') {
             steps {
                 sh 'dotnet build --configuration Release'
+            }
+        }
+
+        stage('Sonar End') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                        dotnet sonarscanner end \
+                        /d:sonar.login=$SONAR_TOKEN
+                        """
+                    }
+                }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
