@@ -99,15 +99,19 @@ pipeline {
             passwordVariable: 'NEXUS_PASS'
         )]) {
 
-            sh """
-            curl -f -u ${NEXUS_USER}:${NEXUS_PASS} \
-            --upload-file ${APP_NAME}-${VERSION}.zip \
-            http://${params.NEXUS_IP}:8081/repository/${params.REPO_NAME}/${APP_NAME}-${VERSION}.zip
-            """
+            sh '''
+            FILE_NAME="''' + APP_NAME + '''-''' + VERSION + '''.zip"
+
+            echo "Uploading $FILE_NAME"
+            ls -l $FILE_NAME
+
+            curl -f -u $NEXUS_USER:$NEXUS_PASS \
+            --upload-file $FILE_NAME \
+            http://''' + params.NEXUS_IP + ''':8081/repository/''' + params.REPO_NAME + '''/$FILE_NAME
+            '''
         }
     }
 }
-
     }
 
     post {
