@@ -24,12 +24,13 @@
                 steps {
                     withSonarQubeEnv('sonar-server') {
                         withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]) {
-                            sh """
+                            sh '''
+                            export PATH=$PATH:$HOME/.dotnet/tools
                             dotnet sonarscanner begin \
                             /k:"$APP_NAME" \
                             /d:sonar.host.url=$SONAR_HOST_URL \
                             /d:sonar.login=$SONAR_TOKEN
-                            """
+                            '''
                         }
                     }
                 }
@@ -52,10 +53,11 @@
                 steps {
                     withSonarQubeEnv('sonar-server') {
                         withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]) {
-                            sh """
+                            sh '''
+                            export PATH=$PATH:$HOME/.dotnet/tools
                             dotnet sonarscanner end \
                             /d:sonar.login=$SONAR_TOKEN
-                            """
+                            '''
                         }
                     }
                 }
